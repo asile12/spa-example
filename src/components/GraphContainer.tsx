@@ -1,8 +1,10 @@
 import React from 'react'
 import { StyledGraphContainer } from '../style'
 
+import { PrefCode } from '../types/aliases'
+
 interface Props {
-   selectedPrefectures: Set<number>
+   selectedPrefectures: Set<PrefCode>
 }
 
 const GraphContainer = ({ selectedPrefectures }: Props) => {

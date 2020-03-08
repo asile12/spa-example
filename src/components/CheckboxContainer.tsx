@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { StyledCheckboxContainer } from '../style'
 import Prefecture from '../types/Prefecture'
 import getPrefectures from '../api/getPrefectures'
+import { PrefCode } from '../types/aliases'
 
 interface Props {
-   selectedPrefectures: Set<number>
-   setSelectedPrefectures: React.Dispatch<React.SetStateAction<Set<number>>>
+   selectedPrefectures: Set<PrefCode>
+   setSelectedPrefectures: React.Dispatch<React.SetStateAction<Set<PrefCode>>>
 }
 
 const CheckboxContainer = ({ selectedPrefectures, setSelectedPrefectures }: Props) => {

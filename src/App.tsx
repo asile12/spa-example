@@ -1,21 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import getPopulation from './api/getPopulation'
+import React, { useState } from 'react'
 import CheckboxContainer from './components/CheckboxContainer'
 import GraphContainer from './components/GraphContainer'
 import { StyledBody } from './style'
+import { PrefCode } from './types/aliases'
 
 const App = () => {
-   const [selectedPrefectures, setSelectedPrefectures] = useState(new Set<number>())
-
-   useEffect(() => {
-      getPopulation(11)
-         .then(data => {
-            console.log(data)
-         })
-         .catch(() => {
-            throw new Error('人口数を取得できませんでした。')
-         })
-   }, [])
+   const [selectedPrefectures, setSelectedPrefectures] = useState(new Set<PrefCode>())
 
    return (
       <StyledBody>

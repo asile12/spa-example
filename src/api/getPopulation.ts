@@ -1,15 +1,13 @@
 import PopulationComposition from '../types/PopulationComposition'
-import ResasApiRejected from '../types/ResasApiRejected'
-import ResasApiResolved from '../types/ResasApiResolved'
-
-type GetPopulationResponse<T> = ResasApiResolved<T> | ResasApiRejected
+import PopulationNumber from '../types/PopulationNumber'
+import { ResasResponse } from '../types/aliases'
 
 interface GetPopulationResult {
    boundaryYear: number
    data: PopulationComposition[]
 }
 
-const getPopulation = (prefCode: number): Promise<GetPopulationResult[]> =>
+const getPopulation = (prefCode: number): Promise<PopulationNumber[]> =>
    fetch(
       `https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=${prefCode}`,
       {
@@ -18,7 +16,7 @@ const getPopulation = (prefCode: number): Promise<GetPopulationResult[]> =>
       }
    )
       .then(response => {
-         return response.json() as Promise<GetPopulationResponse<GetPopulationResult>>
+         return response.json() as Promise<ResasResponse<GetPopulationResult>>
       })
       .then(
          jsonResponse =>
@@ -26,7 +24,14 @@ const getPopulation = (prefCode: number): Promise<GetPopulationResult[]> =>
                if ('statusCode' in jsonResponse) {
                   reject(jsonResponse)
                } else {
-                  resolve(jsonResponse.result)
+                  const generalPopulationData = jsonResponse.result.data.find(
+                     record => record.label === '総人口'
+                  )
+                  if (generalPopulationData !== undefined) {
+                     resolve(generalPopulationData.data)
+                  } else {
+                     reject(jsonResponse)
+                  }
                }
             })
       )
