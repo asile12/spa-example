@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import CheckboxContainer from './components/CheckboxContainer'
 import GraphContainer from './components/GraphContainer'
 import { StyledBody } from './style'
-import { PrefCode } from './types/aliases'
+import Prefecture from './types/Prefecture'
 
 const App = () => {
-   const [selectedPrefectures, setSelectedPrefectures] = useState([] as PrefCode[])
+   const [selectedPrefectures, setSelectedPrefectures] = useState([] as Prefecture[])
 
    return (
       <StyledBody>

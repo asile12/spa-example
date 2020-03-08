@@ -3,8 +3,10 @@ import { StyledGraphContainer, lineColors } from '../style'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import getPopulation from '../api/getPopulation'
 import CustomTooltip from './CustomTooltip'
+import CustomLegend from './CustomLegend'
+import CustomTick from './CustomTick'
 import Spinner from './Spinner'
-import { PrefCode } from '../types/aliases'
+import Prefecture from '../types/Prefecture'
 
 interface PopulationData {
    year: number
@@ -12,7 +14,7 @@ interface PopulationData {
 }
 
 interface Props {
-   selectedPrefectures: PrefCode[]
+   selectedPrefectures: Prefecture[]
 }
 
 const GraphContainer = ({ selectedPrefectures }: Props) => {
@@ -21,7 +23,7 @@ const GraphContainer = ({ selectedPrefectures }: Props) => {
 
    useEffect(() => {
       setLoading(true)
-      const getPopulations = selectedPrefectures.map(prefCode => getPopulation(prefCode))
+      const getPopulations = selectedPrefectures.map(pref => getPopulation(pref.prefCode))
       Promise.all(getPopulations)
          .then(data => {
             if (data.length < 1) {
@@ -34,7 +36,8 @@ const GraphContainer = ({ selectedPrefectures }: Props) => {
                      } else {
                         return {
                            ...accumulator,
-                           [selectedPrefectures[prefIndex]]: prefectureData[yearIndex].value,
+                           [selectedPrefectures[prefIndex].prefCode]:
+                              prefectureData[yearIndex].value,
                         }
                      }
                   }, {})
@@ -63,20 +66,31 @@ const GraphContainer = ({ selectedPrefectures }: Props) => {
                      label={{ value: '年', position: 'insideRight', offset: 0 }}
                      dataKey="year"
                      height={80}
+                     tick={<CustomTick />}
                   />
                   <YAxis
                      label={{ value: '人口数', position: 'insideTopLeft', offset: 0 }}
                      width={140}
+                     tickFormatter={value => value.toLocaleString()}
                   />
-                  <Legend />
+                  <Legend
+                     layout="vertical"
+                     verticalAlign="top"
+                     align="right"
+                     content={
+                        <CustomLegend
+                           selectedPrefectures={selectedPrefectures}
+                           lineColors={lineColors}
+                        />
+                     }
+                  />
                   <Tooltip content={<CustomTooltip />} />
-                  {selectedPrefectures.map((prefCode, index) => (
+                  {selectedPrefectures.map((pref, index) => (
                      <Line
                         key={index}
                         type="monotone"
-                        dataKey={prefCode}
+                        dataKey={pref.prefCode}
                         stroke={lineColors[index % lineColors.length]}
-                        dot={false}
                      />
                   ))}
                </LineChart>

@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { StyledCheckboxContainer } from '../style'
 import Prefecture from '../types/Prefecture'
 import getPrefectures from '../api/getPrefectures'
-import { PrefCode } from '../types/aliases'
 import Checkbox from './Checkbox'
 
 interface Props {
-   selectedPrefectures: PrefCode[]
-   setSelectedPrefectures: React.Dispatch<React.SetStateAction<PrefCode[]>>
+   selectedPrefectures: Prefecture[]
+   setSelectedPrefectures: React.Dispatch<React.SetStateAction<Prefecture[]>>
 }
 
 const CheckboxContainer = ({ selectedPrefectures, setSelectedPrefectures }: Props) => {
@@ -23,11 +22,15 @@ const CheckboxContainer = ({ selectedPrefectures, setSelectedPrefectures }: Prop
          })
    }, [])
 
-   const handleOnChangeCheckbox = (prefCode: number) => {
-      if (selectedPrefectures.includes(prefCode)) {
-         setSelectedPrefectures(selectedPrefectures.filter(code => code !== prefCode))
+   const handleOnChangeCheckbox = (selectedPrefecture: Prefecture) => {
+      if (selectedPrefectures.map(pref => pref.prefCode).includes(selectedPrefecture.prefCode)) {
+         setSelectedPrefectures(
+            selectedPrefectures.filter(
+               prefecture => prefecture.prefCode !== selectedPrefecture.prefCode
+            )
+         )
       } else {
-         setSelectedPrefectures([...selectedPrefectures, prefCode])
+         setSelectedPrefectures([...selectedPrefectures, selectedPrefecture])
       }
    }
 
@@ -39,8 +42,10 @@ const CheckboxContainer = ({ selectedPrefectures, setSelectedPrefectures }: Prop
                <React.Fragment key={index}>
                   <Checkbox
                      label={prefecture.prefName}
-                     checked={selectedPrefectures.includes(prefecture.prefCode)}
-                     onChange={() => handleOnChangeCheckbox(prefecture.prefCode)}
+                     checked={selectedPrefectures
+                        .map(pref => pref.prefCode)
+                        .includes(prefecture.prefCode)}
+                     onChange={() => handleOnChangeCheckbox(prefecture)}
                   />
                </React.Fragment>
             ))}
