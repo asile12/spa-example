@@ -4,13 +4,13 @@ import { StyledGraphContainer } from '../style'
 import { PrefCode } from '../types/aliases'
 
 interface Props {
-   selectedPrefectures: Set<PrefCode>
+   selectedPrefectures: PrefCode[]
 }
 
 const GraphContainer = ({ selectedPrefectures }: Props) => {
    return (
       <StyledGraphContainer>
-         graph:{Array.from(selectedPrefectures).map(pref => pref)}
+         graph:{selectedPrefectures.map(pref => pref)}
       </StyledGraphContainer>
    )
 }

@@ -5,8 +5,8 @@ import getPrefectures from '../api/getPrefectures'
 import { PrefCode } from '../types/aliases'
 
 interface Props {
-   selectedPrefectures: Set<PrefCode>
-   setSelectedPrefectures: React.Dispatch<React.SetStateAction<Set<PrefCode>>>
+   selectedPrefectures: PrefCode[]
+   setSelectedPrefectures: React.Dispatch<React.SetStateAction<PrefCode[]>>
 }
 
 const CheckboxContainer = ({ selectedPrefectures, setSelectedPrefectures }: Props) => {
@@ -23,13 +23,11 @@ const CheckboxContainer = ({ selectedPrefectures, setSelectedPrefectures }: Prop
    }, [])
 
    const handleOnChangeCheckbox = (prefCode: number) => {
-      const newSelectedPrefectures = new Set(selectedPrefectures)
-      if (selectedPrefectures.has(prefCode)) {
-         newSelectedPrefectures.delete(prefCode)
+      if (selectedPrefectures.includes(prefCode)) {
+         setSelectedPrefectures(selectedPrefectures.filter(code => code !== prefCode))
       } else {
-         newSelectedPrefectures.add(prefCode)
+         setSelectedPrefectures([...selectedPrefectures, prefCode])
       }
-      setSelectedPrefectures(newSelectedPrefectures)
    }
 
    return (
@@ -39,7 +37,7 @@ const CheckboxContainer = ({ selectedPrefectures, setSelectedPrefectures }: Prop
                <span>
                   <input
                      type="checkbox"
-                     checked={selectedPrefectures.has(prefecture.prefCode)}
+                     checked={selectedPrefectures.includes(prefecture.prefCode)}
                      onChange={() => handleOnChangeCheckbox(prefecture.prefCode)}
                   />
                   {prefecture.prefName}

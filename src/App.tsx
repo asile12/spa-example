@@ -5,7 +5,7 @@ import { StyledBody } from './style'
 import { PrefCode } from './types/aliases'
 
 const App = () => {
-   const [selectedPrefectures, setSelectedPrefectures] = useState(new Set<PrefCode>())
+   const [selectedPrefectures, setSelectedPrefectures] = useState([] as PrefCode[])
 
    return (
       <StyledBody>
