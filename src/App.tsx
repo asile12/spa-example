@@ -9,9 +9,9 @@ const App = () => {
    useEffect(() => {
       getPrefectures()
          .then(data => {
-            setPrefectures(data.result)
+            setPrefectures(data)
          })
-         .catch(e => {
+         .catch(() => {
             throw new Error('都道府県を取得できませんでした。')
          })
    }, [])
