@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import './App.css'
 import Prefecture from './types/Prefecture'
 import getPrefectures from './api/getPrefectures'
 import getPopulation from './api/getPopulation'
