@@ -4,6 +4,6 @@ const StyledBody = styled.div`
    display: flex;
    flex-direction: column;
    width: 90vh;
-   margin: 1rem auto;
+   margin: 3rem auto;
 `
 export default StyledBody

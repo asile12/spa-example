@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { StyledGraphContainer } from '../style'
-import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts'
+import { StyledGraphContainer, lineColors } from '../style'
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import getPopulation from '../api/getPopulation'
 import CustomTooltip from './CustomTooltip'
+import Spinner from './Spinner'
 import { PrefCode } from '../types/aliases'
 
 interface PopulationData {
@@ -16,8 +17,10 @@ interface Props {
 
 const GraphContainer = ({ selectedPrefectures }: Props) => {
    const [populationData, setPopulationData] = useState([] as PopulationData[])
+   const [loading, setLoading] = useState(false)
 
    useEffect(() => {
+      setLoading(true)
       const getPopulations = selectedPrefectures.map(prefCode => getPopulation(prefCode))
       Promise.all(getPopulations)
          .then(data => {
@@ -42,6 +45,7 @@ const GraphContainer = ({ selectedPrefectures }: Props) => {
                })
                setPopulationData(reducedDataForGraph)
             }
+            setLoading(false)
          })
          .catch(() => {
             throw new Error('人口数を取得できませんでした。')
@@ -50,14 +54,36 @@ const GraphContainer = ({ selectedPrefectures }: Props) => {
 
    return (
       <StyledGraphContainer>
-         <LineChart width={800} height={500} data={populationData}>
-            <XAxis dataKey="year" />
-            <YAxis />
-            <Tooltip content={<CustomTooltip />} />
-            {selectedPrefectures.map((prefCode, index) => (
-               <Line key={index} type="monotone" dataKey={prefCode} stroke="#8884d8" />
-            ))}
-         </LineChart>
+         {loading ? (
+            <Spinner />
+         ) : selectedPrefectures.length > 0 ? (
+            <ResponsiveContainer width="100%" height={500}>
+               <LineChart data={populationData}>
+                  <XAxis
+                     label={{ value: '年', position: 'insideRight', offset: 0 }}
+                     dataKey="year"
+                     height={80}
+                  />
+                  <YAxis
+                     label={{ value: '人口数', position: 'insideTopLeft', offset: 0 }}
+                     width={140}
+                  />
+                  <Legend />
+                  <Tooltip content={<CustomTooltip />} />
+                  {selectedPrefectures.map((prefCode, index) => (
+                     <Line
+                        key={index}
+                        type="monotone"
+                        dataKey={prefCode}
+                        stroke={lineColors[index % lineColors.length]}
+                        dot={false}
+                     />
+                  ))}
+               </LineChart>
+            </ResponsiveContainer>
+         ) : (
+            '都道府県を選択してください'
+         )}
       </StyledGraphContainer>
    )
 }

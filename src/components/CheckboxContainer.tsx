@@ -3,6 +3,7 @@ import { StyledCheckboxContainer } from '../style'
 import Prefecture from '../types/Prefecture'
 import getPrefectures from '../api/getPrefectures'
 import { PrefCode } from '../types/aliases'
+import Checkbox from './Checkbox'
 
 interface Props {
    selectedPrefectures: PrefCode[]
@@ -31,20 +32,20 @@ const CheckboxContainer = ({ selectedPrefectures, setSelectedPrefectures }: Prop
    }
 
    return (
-      <StyledCheckboxContainer>
-         {prefectures.map((prefecture, index) => (
-            <React.Fragment key={index}>
-               <span>
-                  <input
-                     type="checkbox"
+      <>
+         <h3>都道府県</h3>
+         <StyledCheckboxContainer>
+            {prefectures.map((prefecture, index) => (
+               <React.Fragment key={index}>
+                  <Checkbox
+                     label={prefecture.prefName}
                      checked={selectedPrefectures.includes(prefecture.prefCode)}
                      onChange={() => handleOnChangeCheckbox(prefecture.prefCode)}
                   />
-                  {prefecture.prefName}
-               </span>
-            </React.Fragment>
-         ))}
-      </StyledCheckboxContainer>
+               </React.Fragment>
+            ))}
+         </StyledCheckboxContainer>
+      </>
    )
 }
 

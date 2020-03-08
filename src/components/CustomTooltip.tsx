@@ -1,16 +1,22 @@
 import React from 'react'
 
 interface Props {
-   payload?: any | null
+   payload?: any[] | null
    label?: any
    active?: any
 }
 
-const CustomTooltip = ({ payload, label, active }: Props) => {
+const CustomTooltip = ({ payload, active }: Props) => {
    if (active) {
       return (
          <div className="custom-tooltip">
-            <p className="label">{payload !== null ? payload[0].value.toLocaleString() : ''}</p>
+            {payload !== null && payload !== undefined
+               ? payload.map((elem, index) => (
+                    <p key={index} className="label">
+                       {elem.value.toLocaleString()}
+                    </p>
+                 ))
+               : null}
          </div>
       )
    }

@@ -1,3 +1,6 @@
 export { default as StyledBody } from './StyledBody'
 export { default as StyledCheckboxContainer } from './StyledCheckboxContainer'
 export { default as StyledGraphContainer } from './StyledGraphContainer'
+export { default as StyledSpinner } from './StyledSpinner'
+export { default as StyledCheckbox } from './StyledCheckbox'
+export { default as lineColors } from './lineColors'
