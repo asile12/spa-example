@@ -1,10 +1,7 @@
 import React from 'react'
+import { TooltipProps } from 'recharts'
 
-interface Props {
-   payload?: any[] | null
-   label?: any
-   active?: any
-}
+interface Props extends TooltipProps {}
 
 const CustomTooltip = ({ payload, active }: Props) => {
    if (active) {
