@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { StyledGraphContainer, lineColors } from '../style'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts'
-import getPopulation from '../api/getPopulation'
 import CustomTooltip from './CustomTooltip'
 import CustomLegend from './CustomLegend'
 import CustomTick from './CustomTick'
 import Spinner from './Spinner'
 import Prefecture from '../types/Prefecture'
-
-interface PopulationData {
-   year: number
-   [prefCode: number]: number
-}
+import getSelectedPopulations from '../api/getSelectedPopulations'
+import PopulationData from '../types/PopulationData'
 
 interface Props {
    selectedPrefectures: Prefecture[]
@@ -23,31 +19,9 @@ const GraphContainer = ({ selectedPrefectures }: Props) => {
 
    useEffect(() => {
       setLoading(true)
-      const getPopulations = selectedPrefectures.map(pref => getPopulation(pref.prefCode))
-      Promise.all(getPopulations)
+      getSelectedPopulations(selectedPrefectures)
          .then(data => {
-            if (data.length < 1) {
-               setPopulationData([])
-            } else {
-               const reducedDataForGraph = data[0].map((populationPerYear, yearIndex) => {
-                  const prefPopulations = data.reduce((accumulator, prefectureData, prefIndex) => {
-                     if (prefectureData[yearIndex].year !== populationPerYear.year) {
-                        throw new Error('data arrays are not aligned')
-                     } else {
-                        return {
-                           ...accumulator,
-                           [selectedPrefectures[prefIndex].prefCode]:
-                              prefectureData[yearIndex].value,
-                        }
-                     }
-                  }, {})
-                  return {
-                     year: populationPerYear.year,
-                     ...prefPopulations,
-                  }
-               })
-               setPopulationData(reducedDataForGraph)
-            }
+            setPopulationData(data)
             setLoading(false)
          })
          .catch(() => {
