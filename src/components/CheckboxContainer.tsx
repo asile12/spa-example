@@ -27,15 +27,14 @@ const CheckboxContainer = ({ selectedPrefectures, setSelectedPrefectures, prefec
          <h3>都道府県</h3>
          <StyledCheckboxContainer>
             {prefectures.map((prefecture, index) => (
-               <React.Fragment key={index}>
-                  <Checkbox
-                     label={prefecture.prefName}
-                     checked={selectedPrefectures
-                        .map(pref => pref.prefCode)
-                        .includes(prefecture.prefCode)}
-                     onChange={() => handleOnChangeCheckbox(prefecture)}
-                  />
-               </React.Fragment>
+               <Checkbox
+                  key={index}
+                  label={prefecture.prefName}
+                  checked={selectedPrefectures
+                     .map(pref => pref.prefCode)
+                     .includes(prefecture.prefCode)}
+                  onChange={() => handleOnChangeCheckbox(prefecture)}
+               />
             ))}
          </StyledCheckboxContainer>
       </>
