@@ -1,27 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { StyledCheckboxContainer } from '../style'
 import Prefecture from '../types/Prefecture'
-import getPrefectures from '../api/getPrefectures'
 import Checkbox from './Checkbox'
 
 interface Props {
+   prefectures: Prefecture[]
    selectedPrefectures: Prefecture[]
    setSelectedPrefectures: React.Dispatch<React.SetStateAction<Prefecture[]>>
 }
 
-const CheckboxContainer = ({ selectedPrefectures, setSelectedPrefectures }: Props) => {
-   const [prefectures, setPrefectures] = useState([] as Prefecture[])
-
-   useEffect(() => {
-      getPrefectures()
-         .then(data => {
-            setPrefectures(data)
-         })
-         .catch(() => {
-            throw new Error('都道府県を取得できませんでした。')
-         })
-   }, [])
-
+const CheckboxContainer = ({ selectedPrefectures, setSelectedPrefectures, prefectures }: Props) => {
    const handleOnChangeCheckbox = (selectedPrefecture: Prefecture) => {
       if (selectedPrefectures.map(pref => pref.prefCode).includes(selectedPrefecture.prefCode)) {
          setSelectedPrefectures(
