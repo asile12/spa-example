@@ -29,49 +29,53 @@ const GraphContainer = ({ selectedPrefectures }: Props) => {
          })
    }, [selectedPrefectures])
 
+   if (loading) {
+      return (
+         <StyledGraphContainer>
+            <Spinner />
+         </StyledGraphContainer>
+      )
+   }
+   if (selectedPrefectures.length < 1) {
+      return <StyledGraphContainer>都道府県を選択してください</StyledGraphContainer>
+   }
    return (
       <StyledGraphContainer>
-         {loading ? (
-            <Spinner />
-         ) : selectedPrefectures.length > 0 ? (
-            <ResponsiveContainer width="100%" height={500}>
-               <LineChart data={populationData}>
-                  <XAxis
-                     label={{ value: '年', position: 'insideRight', offset: 0 }}
-                     dataKey="year"
-                     height={80}
-                     tick={<CustomTick />}
-                  />
-                  <YAxis
-                     label={{ value: '人口数', position: 'insideTopLeft', offset: 0 }}
-                     width={140}
-                     tickFormatter={value => value.toLocaleString()}
-                  />
-                  <Legend
-                     layout="vertical"
-                     verticalAlign="top"
-                     align="right"
-                     content={
-                        <CustomLegend
-                           selectedPrefectures={selectedPrefectures}
-                           lineColors={lineColors}
-                        />
-                     }
-                  />
-                  <Tooltip content={<CustomTooltip />} />
-                  {selectedPrefectures.map((pref, index) => (
-                     <Line
-                        key={index}
-                        type="monotone"
-                        dataKey={pref.prefCode}
-                        stroke={lineColors[index % lineColors.length]}
+         <ResponsiveContainer width="100%" height={500}>
+            <LineChart data={populationData}>
+               <XAxis
+                  label={{ value: '年', position: 'insideRight', offset: 0 }}
+                  dataKey="year"
+                  height={80}
+                  tick={<CustomTick />}
+               />
+               <YAxis
+                  label={{ value: '人口数', position: 'insideTopLeft', offset: 0 }}
+                  width={140}
+                  tickFormatter={value => value.toLocaleString()}
+               />
+               <Legend
+                  layout="vertical"
+                  verticalAlign="top"
+                  align="right"
+                  content={
+                     <CustomLegend
+                        selectedPrefectures={selectedPrefectures}
+                        lineColors={lineColors}
                      />
-                  ))}
-               </LineChart>
-            </ResponsiveContainer>
-         ) : (
-            '都道府県を選択してください'
-         )}
+                  }
+               />
+               <Tooltip content={<CustomTooltip />} />
+               {selectedPrefectures.map((pref, index) => (
+                  <Line
+                     key={index}
+                     type="monotone"
+                     dataKey={pref.prefCode}
+                     stroke={lineColors[index % lineColors.length]}
+                  />
+               ))}
+            </LineChart>
+         </ResponsiveContainer>
       </StyledGraphContainer>
    )
 }
