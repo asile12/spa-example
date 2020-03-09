@@ -7,9 +7,9 @@ import Spinner from './components/Spinner'
 import getPrefectures from './api/getPrefectures'
 
 const App = () => {
+   const [prefectures, setPrefectures] = useState([] as Prefecture[])
    const [selectedPrefectures, setSelectedPrefectures] = useState([] as Prefecture[])
    const [loading, setLoading] = useState(true)
-   const [prefectures, setPrefectures] = useState([] as Prefecture[])
 
    useEffect(() => {
       getPrefectures()
@@ -22,20 +22,22 @@ const App = () => {
          })
    }, [])
 
+   if (loading) {
+      return (
+         <StyledBody>
+            <Spinner />
+         </StyledBody>
+      )
+   }
+
    return (
       <StyledBody>
-         {loading ? (
-            <Spinner />
-         ) : (
-            <>
-               <CheckboxContainer
-                  prefectures={prefectures}
-                  selectedPrefectures={selectedPrefectures}
-                  setSelectedPrefectures={setSelectedPrefectures}
-               />
-               <GraphContainer selectedPrefectures={selectedPrefectures} />
-            </>
-         )}
+         <CheckboxContainer
+            prefectures={prefectures}
+            selectedPrefectures={selectedPrefectures}
+            setSelectedPrefectures={setSelectedPrefectures}
+         />
+         <GraphContainer selectedPrefectures={selectedPrefectures} />
       </StyledBody>
    )
 }
